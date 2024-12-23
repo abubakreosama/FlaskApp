@@ -1,0 +1,37 @@
+<!-- templates/tasks/edit.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Edit Task</h1>
+<form action="/tasks/{{ task.id }}" method="POST">
+    <input type="hidden" name="_method" value="PUT">
+    <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input type="text" name="name" class="form-control" value="{{ task.name }}" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea name="description" class="form-control" rows="3">{{ task.description }}</textarea>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Priority</label>
+        <select name="priority" class="form-select" required>
+            <option value="low" {% if task.priority == 'low' %}selected{% endif %}>Low</option>
+            <option value="medium" {% if task.priority == 'medium' %}selected{% endif %}>Medium</option>
+            <option value="high" {% if task.priority == 'high' %}selected{% endif %}>High</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Assign To</label>
+        <select name="user_id" class="form-select" required>
+            {% for user in users %}
+            <option value="{{ user.id }}" {% if user.id == task.user_id %}selected{% endif %}>
+                {{ user.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Update Task</button>
+    <a href="/tasks" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}
